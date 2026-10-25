@@ -1,0 +1,88 @@
+[17:26:52] [Datafixer Bootstrap #0/INFO]: 307 Datafixer optimizations took 606 milliseconds
+[17:26:53] [main/ERROR]: Unable to locate English counter names in registry Perflib 009. Counters may need to be rebuilt: 
+com.sun.jna.platform.win32.Win32Exception: The parameter is incorrect.
+	at com.sun.jna.platform.win32.Advapi32Util.registryGetStringArray(Advapi32Util.java:921)
+	at com.sun.jna.platform.win32.Advapi32Util.registryGetStringArray(Advapi32Util.java:898)
+	at oshi.driver.windows.registry.HkeyPerformanceDataUtil.mapCounterIndicesFromRegistry(HkeyPerformanceDataUtil.java:274)
+	at oshi.driver.windows.registry.HkeyPerformanceDataUtil.<clinit>(HkeyPerformanceDataUtil.java:51)
+	at oshi.driver.windows.registry.ProcessPerformanceData.buildProcessMapFromRegistry(ProcessPerformanceData.java:45)
+	at oshi.software.os.windows.WindowsOperatingSystem.queryProcessMapFromRegistry(WindowsOperatingSystem.java:328)
+	at oshi.util.Memoizer$1.get(Memoizer.java:65)
+	at oshi.software.os.windows.WindowsOperatingSystem.processMapToList(WindowsOperatingSystem.java:298)
+	at oshi.software.os.windows.WindowsOperatingSystem.getProcess(WindowsOperatingSystem.java:292)
+	at oshi.software.os.OperatingSystem.getCurrentProcess(OperatingSystem.java:246)
+	at net.minecraft.SystemReport.lambda$putSoftware$0(SystemReport.java:116)
+	at net.minecraft.SystemReport.ignoreErrors(SystemReport.java:121)
+	at net.minecraft.SystemReport.putSoftware(SystemReport.java:116)
+	at net.minecraft.SystemReport.lambda$new$7(SystemReport.java:68)
+	at net.minecraft.SystemReport.ignoreErrors(SystemReport.java:121)
+	at net.minecraft.SystemReport.<init>(SystemReport.java:68)
+	at net.minecraft.CrashReport.<init>(CrashReport.java:35)
+	at net.minecraft.CrashReport.preload(CrashReport.java:252)
+	at net.minecraft.client.main.Main.main(Main.java:172)
+[17:26:53] [main/WARN]: Unable to locate English counter names in registry Perflib 009. Assuming English counters. Error 0x80070057. See https://support.microsoft.com/en-us/help/300956/how-to-manually-rebuild-performance-counter-library-values
+[17:27:00] [Render thread/INFO]: Environment: Environment[discoveryUrl=https://discovery.minecraftservices.com/minecraft/client, name=PROD]
+[17:27:00] [Render thread/INFO]: Setting user: Dhanraj
+[17:27:00] [Render thread/INFO]: Backend library: LWJGL version 3.4.3+4
+[17:27:00] [Render thread/INFO]: SDL [SYSTEM]: App name: Minecraft
+[17:27:00] [Render thread/INFO]: SDL [SYSTEM]: App version: 26.3
+[17:27:00] [Render thread/INFO]: SDL [SYSTEM]: App ID: com.mojang.minecraft
+[17:27:00] [Render thread/INFO]: SDL [SYSTEM]: SDL revision: SDL-3.4.14-62f10da
+[17:27:01] [Download-2/ERROR]: Failed to fetch user properties
+com.mojang.authlib.exceptions.InvalidCredentialsException: Status: 401
+	at com.mojang.authlib.exceptions.MinecraftClientHttpException.toAuthenticationException(MinecraftClientHttpException.java:70)
+	at com.mojang.authlib.services.MinecraftServicesUserApiService.fetchProperties(MinecraftServicesUserApiService.java:168)
+	at net.minecraft.client.Minecraft.lambda$new$1(Minecraft.java:451)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: MinecraftClientHttpException[type=HTTP_ERROR, status=401, response=ErrorResponse[path=/player/attributes, error=null, errorMessage=null, details=null]]
+	at com.mojang.authlib.minecraft.client.MinecraftClient.buildHttpException(MinecraftClient.java:170)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readServiceResponse(MinecraftClient.java:147)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.getWithEtag(MinecraftClient.java:81)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:65)
+	at com.mojang.authlib.services.MinecraftServicesUserApiService.fetchProperties(MinecraftServicesUserApiService.java:118)
+	... 5 more
+[17:27:02] [Render thread/INFO]: Using graphics backend OpenGL, using drivers: 3.3.0 NVIDIA 616.92
+[17:27:02] [Render thread/INFO]: Using graphics device: NVIDIA GeForce GTX 1650/PCIe/SSE2 (NVIDIA Corporation)
+[17:27:02] [Render thread/INFO]: Using graphics device extensions: GL_ARB_multi_draw_indirect, GL_ARB_shader_draw_parameters, GL_ARB_base_instance, GL_KHR_debug, GL_ARB_draw_indirect, GL_ARB_clip_control, GL_ARB_vertex_attrib_binding, GL_ARB_direct_state_access, GL_EXT_texture_filter_anisotropic
+[17:27:02] [Render thread/INFO]: Created window using SDL video driver: windows
+[17:27:04] [Download-1/INFO]: Could not authorize you against Realms server: javax.ws.rs.BadRequestException: Invalid session
+[17:27:04] [Download-1/ERROR]: Failed to fetch Realms feature flags
+com.mojang.realmsclient.exception.RealmsServiceException: Realms authentication error with message 'javax.ws.rs.BadRequestException: Invalid session'
+	at com.mojang.realmsclient.client.RealmsClient.execute(RealmsClient.java:625)
+	at com.mojang.realmsclient.client.RealmsClient.fetchFeatureFlags(RealmsClient.java:204)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[17:27:04] [Render thread/INFO]: Reloading ResourceManager: vanilla, vanilla
+[17:27:04] [Worker-Main-10/INFO]: Found unifont_pua-17.0.01.hex, loading
+[17:27:04] [Worker-Main-7/INFO]: Found unifont_all_no_pua-17.0.01.hex, loading
+[17:27:04] [Worker-Main-2/INFO]: Found unifont_jp_patch-17.0.01.hex, loading
+[17:27:08] [Render thread/INFO]: OpenAL initialized on device OpenAL Soft on Headphone (Realtek(R) Audio)
+[17:27:08] [Render thread/INFO]: Sound engine started
+[17:27:08] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 256x128x0 minecraft:textures/atlas/celestials.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 128x128x0 minecraft:textures/atlas/decorated_pot.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
+[17:27:08] [Render thread/INFO]: Created: 2048x2048x4 minecraft:textures/atlas/blocks.png-atlas
+[17:27:09] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/items.png-atlas
+[17:27:09] [Render thread/INFO]: Created: 1024x1024x0 minecraft:textures/atlas/gui.png-atlas
+[17:27:09] [Render thread/INFO]: Created: 128x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[17:27:09] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/chest.png-atlas
+[17:27:09] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/shulker_boxes.png-atlas
+[17:27:15] [Download-1/INFO]: Could not authorize you against Realms server: javax.ws.rs.BadRequestException: Invalid session
+[17:27:15] [Download-1/ERROR]: Couldn't connect to realms
+com.mojang.realmsclient.exception.RealmsServiceException: Realms authentication error with message 'javax.ws.rs.BadRequestException: Invalid session'
+	at com.mojang.realmsclient.client.RealmsClient.execute(RealmsClient.java:625)
+	at com.mojang.realmsclient.client.RealmsClient.clientCompatible(RealmsClient.java:354)
+	at com.mojang.realmsclient.RealmsAvailability.lambda$check$0(RealmsAvailability.java:48)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[17:27:51] [Render thread/INFO]: Stopping!

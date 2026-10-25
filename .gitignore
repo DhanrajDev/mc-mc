@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Downloaded Minecraft files and saves
+/my_cracked_minecraft/
