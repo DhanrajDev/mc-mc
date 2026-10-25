@@ -5,3 +5,4 @@ __pycache__/
 
 # Downloaded Minecraft files and saves
 /my_cracked_minecraft/
+*.log

@@ -1,6 +1,16 @@
 # Minecraft Java Launcher
 
-Double-click Launch.bat to open the window, or run:
+## Friend setup (Windows)
+
+1. Install Python 3.10 or newer from https://www.python.org/downloads/windows/ with Tcl/Tk and the Python launcher included.
+2. Clone this Git repository, or download its ZIP and extract it to a writable folder.
+3. Double-click Launch.bat. First run creates .venv and installs dependencies automatically; internet is required. Subsequent runs reuse it.
+
+The project can live in a path containing spaces. Each friend gets their own environment and Minecraft files; neither is included in Git. No fixed user paths are required. Java for the selected Minecraft release is downloaded by the game installation step.
+
+To set up without opening the window, run `Launch.bat --setup-only`.
+
+Once set up, you can also run:
 
 ```powershell
 .\.venv\Scripts\python.exe launcher.py
@@ -26,10 +36,10 @@ Game files remain in my_cracked_minecraft, preserving the original script's loca
 
 ## Dependencies
 
-Python 3.14 with tkinter and the included .venv. Recreate dependencies with:
+Python 3.10 or newer with tkinter. The environment is created locally, not shared. Manual setup, if needed:
 
 ```powershell
-py -3.14 -m venv .venv
+py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 

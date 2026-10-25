@@ -13,3 +13,4 @@
 - game.log: most recent game process output (created on play).
 - test_launcher.py: focused offline launch and authentication checks.
 - optifine-install.log: official installer output, created during OptiFine installation.
+- bootstrap.py: portable environment/dependency setup and GUI startup.

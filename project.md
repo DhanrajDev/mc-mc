@@ -5,3 +5,5 @@ Simple Tkinter Minecraft Java launcher with release selection, RAM control, prog
 Validation: see validation.md. Real account login, full game download, gameplay and multiplayer require live verification.
 
 OptiFine support: official download link, local JAR installer workflow using the base game's Java, copied target path, local version scan and automatic selection. Installer requires user to set its Folder. Seven offline tests pass; actual OptiFine install/gameplay unverified.
+
+Friend setup: Launch.bat now discovers an existing environment, the Windows Python launcher, or Python on PATH. bootstrap.py creates .venv and installs pinned requirements on first run or requirements changes, then opens the GUI. Requires Python3.10+ with Tcl/Tk; does not bundle Python. Logs ignored and game.log removed from Git index while retained locally. Clean-copy first setup and repeat setup passed on Python3.14, from a path with spaces; seven existing tests pass. Other Windows machines/Python versions not directly tested.
