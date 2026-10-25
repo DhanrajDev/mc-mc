@@ -17,6 +17,16 @@ GAME = BASE / 'my_cracked_minecraft'
 REDIRECT = 'https://login.microsoftonline.com/common/oauth2/nativeclient'
 
 
+def ensure_launcher_profiles(directory):
+    """Supply the metadata expected by OptiFine without replacing profiles."""
+    directory.mkdir(parents=True, exist_ok=True)
+    try:
+        with (directory / 'launcher_profiles.json').open('x', encoding='utf-8') as stream:
+            json.dump({'profiles': {}}, stream)
+    except FileExistsError:
+        pass
+
+
 def local_options(name):
     if not re.fullmatch(r'[A-Za-z0-9_]{3,16}', name):
         raise ValueError('Username must contain 3–16 letters, numbers, or underscores.')
@@ -110,12 +120,8 @@ class Launcher:
         before = set(self.installed_versions())
         self.status.set('Preparing Minecraft for OptiFine…')
         def install():
+            ensure_launcher_profiles(GAME)
             mc.install.install_minecraft_version(version, str(GAME), callback=self.callbacks())
-            # OptiFine expects an existing launcher profile file, even for custom launchers.
-            profiles = GAME / 'launcher_profiles.json'
-            if not profiles.exists():
-                with profiles.open('x', encoding='utf-8') as stream:
-                    json.dump({'profiles': {}}, stream)
             java = mc.command.get_minecraft_command(version, str(GAME), local_options('Player'))[0]
             self.events.put(('status', 'OptiFine installer open: set Folder to the copied game path, install, then close it.'))
             with (BASE / 'optifine-install.log').open('w', encoding='utf-8') as log:
@@ -250,6 +256,7 @@ class Launcher:
 
 
 def main():
+    ensure_launcher_profiles(GAME)
     root = tk.Tk()
     Launcher(root)
     root.mainloop()

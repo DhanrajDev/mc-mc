@@ -1,6 +1,7 @@
 """Focused offline checks; never downloads or starts Minecraft."""
 import time
 import tempfile
+import json
 from pathlib import Path
 import tkinter as tk
 import unittest
@@ -9,6 +10,17 @@ import launcher_gui as gui
 
 
 class LauncherTests(unittest.TestCase):
+    def test_profile_metadata_created_and_existing_content_preserved(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder) / 'new game folder'
+            gui.ensure_launcher_profiles(directory)
+            profile = directory / 'launcher_profiles.json'
+            self.assertEqual(json.loads(profile.read_text()), {'profiles': {}})
+            profile.write_text('{"profiles":{"custom":{"name":"Keep me"}}}')
+            before = profile.read_bytes()
+            gui.ensure_launcher_profiles(directory)
+            self.assertEqual(profile.read_bytes(), before)
+
     def setUp(self):
         self.root = tk.Tk()
         self.root.withdraw()

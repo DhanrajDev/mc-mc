@@ -52,3 +52,5 @@ py -3 -m venv .venv
 5. The new OptiFine version is selected automatically. Press Install / Play.
 
 Refresh versions rescans locally installed versions. These remain listed even if the online manifest is unavailable. Installation errors are recorded in optifine-install.log. A matching OptiFine release must exist for the chosen Minecraft version; this launcher does not bundle or redistribute OptiFine.
+
+The launcher creates launcher_profiles.json on startup for OptiFine compatibility, preserving any existing file. If installing OptiFine manually, open this launcher once first to prepare the game folder.

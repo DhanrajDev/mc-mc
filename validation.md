@@ -15,3 +15,5 @@ Friend setup validation (October 25):
 - Repeated setup reused that environment without reinstalling dependencies.
 - Existing checkout setup passed; all seven launcher tests pass.
 - Verified on this Windows machine with Python3.14 only; no friend-PC execution claimed.
+
+OptiFine missing-profile repair: confirmed live file absent and Minecraft26.2 metadata present. Created launcher_profiles.json; eight tests pass, including creating a new profile file and byte-preserving an existing one. Installer retry remains user verification.
