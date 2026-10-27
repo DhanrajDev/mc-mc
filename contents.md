@@ -1,16 +1,21 @@
 # Contents
 
-- launcher.py / main.py: GUI entry points.
-- launcher_gui.py: interface, authentication, install and launch.
-- Launch.bat: double-click launcher.
-- launcher_original.py: preserved original console script.
-- requirements.txt: pinned dependencies.
-- README.md: operator instructions and authentication setup.
-- project.md: scope and current state.
-- validation.md: verification and limits.
-- .venv/: local Python environment.
-- my_cracked_minecraft/: game installation (created on install).
-- game.log: most recent game process output (created on play).
-- test_launcher.py: focused offline launch and authentication checks.
-- optifine-install.log: official installer output, created during OptiFine installation.
-- bootstrap.py: portable environment/dependency setup and GUI startup.
+- launcher.py: source/frozen entry point and isolated smoke-test dispatch.
+- main.py / launcher_gui.py: entry point and themed profile/install/play interface.
+- launcher_core.py: settings, stable local identity, atomic JSON and version registration.
+- mod_installers.py: Iris release/Fabric integration and official OptiFine JAR bridge.
+- launcher_theme.py: dark/mint ttk theme and private Manrope font loading.
+- assets/fonts/: Manrope and OFL license.
+- assets/java/: OptiFineBridge source and Java8-compatible compiled class.
+- assets/craftline.ico: custom geometric cube icon.
+- assets/licenses/ / THIRD_PARTY_NOTICES.md: bundled runtime/dependency notices.
+- test_launcher.py / test_settings.py / test_mod_installers.py: offline verification.
+- smoke_check.py: disposable first-run/persistence/font check, also used on frozen/installed app.
+- Launch.bat / bootstrap.py / requirements.txt: source-clone setup.
+- build.ps1 / requirements-build.txt / Craftline.spec / installer.iss / version_info.txt: Windows app/installer build.
+- README.md / project.md / validation.md: user, maintainer and evidence notes.
+- dist/: ignored build deliverables. Craftline-Setup.exe is the shareable installer.
+- %APPDATA%/.minecraft/: all game files and craftline-launcher/settings.json; never packaged.
+- .minecraft/logs/launcher.log and optifine-install.log: runtime diagnostics.
+- my_cracked_minecraft/: ignored legacy backup; no longer used by the app.
+- launcher_original.py: preserved original script, not used or included in the installer.

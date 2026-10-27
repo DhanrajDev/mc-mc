@@ -22,9 +22,11 @@ class LauncherTests(unittest.TestCase):
             self.assertEqual(profile.read_bytes(), before)
 
     def setUp(self):
+        self.folder = tempfile.TemporaryDirectory()
         self.root = tk.Tk()
         self.root.withdraw()
         self.patches = [
+            patch.object(gui, 'GAME', Path(self.folder.name)),
             patch.object(gui.mc.utils, 'get_version_list', return_value=[]),
             patch.object(gui.messagebox, 'showerror'),
         ]
@@ -36,6 +38,7 @@ class LauncherTests(unittest.TestCase):
         self.app.close()
         for p in reversed(self.patches):
             p.stop()
+        self.folder.cleanup()
 
     def drain(self):
         deadline = time.monotonic() + 3
@@ -45,6 +48,7 @@ class LauncherTests(unittest.TestCase):
         self.assertFalse(self.app.busy)
 
     def test_requires_online_account_before_install(self):
+        self.app.mode.set('Microsoft account')
         with patch.object(gui.mc.install, 'install_minecraft_version') as install:
             self.app.launch()
             install.assert_not_called()
@@ -57,7 +61,7 @@ class LauncherTests(unittest.TestCase):
         def install(version, directory, callback):
             callback['setMax'](10)
             callback['setProgress'](5)
-        with patch.object(gui.mc.install, 'install_minecraft_version', side_effect=install), patch.object(gui.mc.command, 'get_minecraft_command', return_value=['java', 'example']) as command, patch.object(gui.subprocess, 'Popen', return_value=process) as popen, patch.object(gui.Path, 'open', unittest.mock.mock_open()):
+        with patch.object(gui.mc.install, 'install_minecraft_version', side_effect=install), patch.object(gui.mc.command, 'get_minecraft_command', return_value=['java', 'example']) as command, patch.object(gui.subprocess, 'Popen', return_value=process) as popen:
             self.app.launch()
             self.drain()
             options = command.call_args.args[2]
@@ -79,10 +83,11 @@ class LauncherTests(unittest.TestCase):
             gui.mc.microsoft_account.parse_auth_code_url(gui.REDIRECT + '?code=example&state=wrong', 'expected')
 
     def test_online_uses_signed_in_profile(self):
+        self.app.mode.set('Microsoft account')
         self.app.account = {'name': 'Example', 'id': 'profile-id', 'access_token': 'test-token'}
         process = MagicMock()
         process.wait.return_value = 0
-        with patch.object(gui.mc.install, 'install_minecraft_version'), patch.object(gui.mc.command, 'get_minecraft_command', return_value=['java']) as command, patch.object(gui.subprocess, 'Popen', return_value=process), patch.object(gui.Path, 'open', unittest.mock.mock_open()):
+        with patch.object(gui.mc.install, 'install_minecraft_version'), patch.object(gui.mc.command, 'get_minecraft_command', return_value=['java']) as command, patch.object(gui.subprocess, 'Popen', return_value=process):
             self.app.launch()
             self.drain()
             self.assertEqual(command.call_args.args[2]['token'], 'test-token')
@@ -93,23 +98,25 @@ class LauncherTests(unittest.TestCase):
             version = '1.20.1-OptiFine_HD_U_I6'
             profile = Path(folder) / 'versions' / version / (version + '.json')
             profile.parent.mkdir(parents=True)
-            profile.write_text('{}')
+            profile.write_text(json.dumps({'id': version}))
             self.app.load_versions()
-            self.app.poll()
+            deadline = time.monotonic() + .2
+            while time.monotonic() < deadline:
+                self.root.update()
+                time.sleep(.01)
             self.assertIn(version, self.app.versions['values'])
 
     def test_optifine_installer_uses_game_java_and_selects_new_profile(self):
         with tempfile.TemporaryDirectory() as folder, patch.object(gui, 'GAME', Path(folder)):
             version = '1.20.1-OptiFine_HD_U_I6'
-            def installer(command, **kwargs):
-                self.assertEqual(command[0], 'bundled-java')
-                self.assertEqual(command[1], '-jar')
-                self.assertEqual(kwargs['cwd'], Path(folder))
+            def installer(jar, base, directory, callback):
+                self.assertEqual(directory, Path(folder))
                 profile = Path(folder) / 'versions' / version / (version + '.json')
                 profile.parent.mkdir(parents=True)
-                profile.write_text('{}')
-                return MagicMock(returncode=0)
-            with patch.object(gui.filedialog, 'askopenfilename', return_value=str(Path(folder) / 'OptiFine.jar')), patch.object(gui.messagebox, 'showinfo'), patch.object(gui.mc.install, 'install_minecraft_version'), patch.object(gui.mc.command, 'get_minecraft_command', return_value=['bundled-java']), patch.object(gui.subprocess, 'run', side_effect=installer), patch.object(gui, 'BASE', Path(folder)):
+                profile.write_text(json.dumps({'id': version}))
+                gui.ensure_launcher_profiles(Path(folder))
+                return version
+            with patch.object(gui.filedialog, 'askopenfilename', return_value=str(Path(folder) / 'OptiFine.jar')), patch.object(gui.mod_installers, 'install_optifine', side_effect=installer):
                 self.app.install_optifine()
                 self.drain()
                 self.assertEqual(self.app.version.get(), version)

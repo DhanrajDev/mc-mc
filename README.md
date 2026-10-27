@@ -1,56 +1,73 @@
-# Minecraft Java Launcher
+# Craftline 1.0.0
 
-## Friend setup (Windows)
+A small independent Minecraft Java launcher for Windows, with saved profiles and direct Iris/OptiFine installation. Not affiliated with Mojang or Microsoft.
 
-1. Install Python 3.10 or newer from https://www.python.org/downloads/windows/ with Tcl/Tk and the Python launcher included.
-2. Clone this Git repository, or download its ZIP and extract it to a writable folder.
-3. Double-click Launch.bat. First run creates .venv and installs dependencies automatically; internet is required. Subsequent runs reuse it.
+## Install and share
 
-The project can live in a path containing spaces. Each friend gets their own environment and Minecraft files; neither is included in Git. No fixed user paths are required. Java for the selected Minecraft release is downloaded by the game installation step.
+Run Craftline-Setup.exe. Python and Tcl/Tk are included: friends do not need Python, pip, or a JDK. The installer adds Start-menu and optional Desktop shortcuts. Internet is required for game/mod downloads. Minecraft itself is not bundled.
 
-To set up without opening the window, run `Launch.bat --setup-only`.
+Uninstalling Craftline removes the application, not your Minecraft saves, mods or profiles.
 
-Once set up, you can also run:
+## Play and identity
 
-```powershell
-.\.venv\Scripts\python.exe launcher.py
+Use the Play tab to choose a saved profile, account type, username, Minecraft version and RAM. The optional server address joins that server when supported by the selected game version; leave it empty for the main menu.
+
+Profiles save automatically, including the username, standard deterministic local UUID, version, RAM, server address and public Azure client ID. Keep the same username to retain your identity on servers that accept local accounts. Changing that name changes the local identity. Verified servers require Microsoft sign-in and Minecraft ownership.
+
+Profiles are shared between source and installed builds at:
+
+```text
+%APPDATA%\.minecraft\craftline-launcher\settings.json
 ```
 
-Choose a release version (or type one), RAM allowance, and profile. Install / Play downloads missing game files and the matching Java runtime using minecraft-launcher-lib. Download work runs in a background thread with visible progress. Startup output goes to game.log.
+The first run imports your last username from Minecraft's log if available. Malformed settings are preserved in a recovery copy. Passwords, access tokens and refresh tokens are not written to this file. Microsoft sessions are kept in memory, so sign in again after restarting.
 
-## Microsoft online play
+## Iris + Sodium
 
-Requires an account with Minecraft Java access and your own Azure application client ID approved to use the Minecraft API. Register an application supporting personal Microsoft accounts, with the Mobile/Desktop redirect URI:
+1. Open Install mods and select the Minecraft release.
+2. Click Install Iris + Sodium.
+3. Return to Play. The new Iris version is listed, selected and saved automatically.
 
-https://login.microsoftonline.com/common/oauth2/nativeclient
-
-Paste the client ID into the launcher, press Sign in with Microsoft, finish in your browser, and paste the full redirected URL into the prompt. PKCE and state validation are used; no client secret is required. Tokens remain in memory; sign in again after closing the launcher or when the session expires. Never share the callback URL. New applications may require Minecraft API approval before sign-in works.
-
-Setup reference: https://minecraft-launcher-lib.readthedocs.io/en/stable/tutorial/microsoft_login.html
-
-## Local / no authentication
-
-Select this profile, enter a username, and press Install / Play. Supports single-player and servers configured to accept unauthenticated clients. It cannot join servers that require a verified Minecraft account.
-
-Game files remain in my_cracked_minecraft, preserving the original script's location. launcher_original.py is the original console script backup. No downloads occur until Install / Play is pressed, apart from fetching the version list.
-
-## Dependencies
-
-Python 3.10 or newer with tkinter. The environment is created locally, not shared. Manual setup, if needed:
-
-```powershell
-py -3 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-```
+The launcher downloads IrisShaders' official release bundle with Python's HTTPS stack, verifies a published SHA256 if supplied and checks ZIP contents. It prepares Minecraft/Fabric, stores mods in .minecraft\iris-reserved\VERSION and registers the resulting launch profile. The standalone Iris installer is not required. Unsupported versions produce a clear message; choose a supported release.
 
 ## OptiFine
 
-1. Select the vanilla version you want (for example 1.20.1).
-2. Click Download OptiFine and download the matching official installer JAR.
-3. Click Install OptiFine JAR and select that file. The launcher prepares the base game and its Java runtime.
-4. In the official installer, set Folder to this launcher's my_cracked_minecraft directory. The complete path is copied to your clipboard. Click Install, then close the installer.
-5. The new OptiFine version is selected automatically. Press Install / Play.
+1. Open official OptiFine downloads from the Install mods tab and download its installer JAR.
+2. Click Install OptiFine JAR and select that file.
+3. The launcher identifies the Minecraft version, prepares it, calls the official installer's public installation API and registers/selects the resulting version.
 
-Refresh versions rescans locally installed versions. These remain listed even if the online manifest is unavailable. Installation errors are recorded in optifine-install.log. A matching OptiFine release must exist for the chosen Minecraft version; this launcher does not bundle or redistribute OptiFine.
+No folder-picker or JSON editing is required. OptiFine is not bundled or redistributed. Iris and OptiFine remain separate versions.
 
-The launcher creates launcher_profiles.json on startup for OptiFine compatibility, preserving any existing file. If installing OptiFine manually, open this launcher once first to prepare the game folder.
+## Standard Minecraft files
+
+All game data uses %APPDATA%\.minecraft, including assets, libraries, Java runtimes, saves, shaderpacks and versions. Missing launcher_profiles.json is created on startup and before installations. Craftline version registrations preserve existing official-launcher entries.
+
+Logs: .minecraft\logs\launcher.log and .minecraft\logs\optifine-install.log. Settings contains an Open shader packs shortcut; install a shader pack separately if desired.
+
+## Microsoft sign-in
+
+Requires an account with Minecraft Java access and an Azure application client ID permitted to access the Minecraft API. Enter the public client ID under Settings. Configure its Mobile/Desktop redirect URI as:
+
+```text
+https://login.microsoftonline.com/common/oauth2/nativeclient
+```
+
+Click Sign in with Microsoft, finish sign-in in your browser, and paste the full redirected URL into the prompt. PKCE/state validation are used; no client secret is required. Never share a callback URL. New applications may require Minecraft API permission.
+
+Documentation: https://minecraft-launcher-lib.readthedocs.io/en/stable/tutorial/microsoft_login.html
+
+## Run source / build
+
+For source clones, install Python3.10+ with Tcl/Tk and double-click Launch.bat. It prepares .venv automatically. Use Launch.bat --setup-only for dependency setup only.
+
+To build on Windows, install Inno Setup6 and run:
+
+```powershell
+.\build.ps1
+# Or specify its compiler explicitly:
+.\build.ps1 -InnoCompiler 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+```
+
+Produces dist\Craftline\Craftline.exe and dist\Craftline-Setup.exe. Bundled assets include the private Manrope font (OFL1.1) and a Java8-compatible helper for OptiFine's public API. Tests: .\.venv\Scripts\python.exe -m unittest discover -v
+
+The former project-local my_cracked_minecraft directory is only a retained migration backup, not an active game location. It is excluded from Git along with environments, game data, logs and build outputs.
